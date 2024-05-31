@@ -32,8 +32,8 @@ const LoginPage = () => {
     }
     try {
       const response = await axios.post('http://localhost:3001/api/auth/login', { email, password });
-      const { token, user } = response.data; // Destructure token and user from the response
-      setAuthData({ token, user }); // Store both token and user in authData
+      const { token, user } = response.data; 
+      setAuthData({ token, user });
       navigate('/tasks');
     } catch (error) {
       console.error('Login error', error);
