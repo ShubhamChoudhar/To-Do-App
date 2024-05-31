@@ -5,7 +5,7 @@ Prerequisites
 •	A MongoDB Atlas account.
 
 
-1. sDownload the zip folder and unzip the folder and files. Place the provided folder onto your computer. Then, open Visual Studio Code and enter the command npm install in the terminal to install the necessary dependencies.
+1. Download the zip folder and unzip the folder and files. Place the provided folder onto your computer. Then, open Visual Studio Code and enter the command npm install in the terminal to install the necessary dependencies.
 2. Setup MongoDB Atlas:
 3. Go to MongoDB Atlas.
 4. Create an account and sign in.
