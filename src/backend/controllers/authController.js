@@ -1,36 +1,60 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+
+const SECRET_KEY = process.env.ACCESS_TOKEN_SECRET;
+
+const generateToken = (userId) => {
+  // Generate a JWT token with userId payload
+  const token = jwt.sign({ userId }, SECRET_KEY, { expiresIn: '1h' }); // Assuming you have defined SECRET_KEY
+
+  return token;
+};
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
+
   try {
-    const user = new User({ username, email, password });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = new User({ username, email, password: hashedPassword});
     await user.save();
+
     res.status(201).send('User registered successfully');
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
-const SECRET_KEY = process.env.ACCESS_TOKEN_SECRET 
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).send('Email and password are required');
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(400).send('User email not found');
     }
-    const isPasswordValid = await user.comparePassword(password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-    const token = jwt.sign({ userId: user._id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
 
-    res.json({ token, user: { email: user.email, password: user.password } });
-  } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ error: 'Server error' });
+    // Compare the provided password with the stored hashed password using bcrypt
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      console.error('Password comparison failed:', { email, password });
+      return res.status(400).send('Password is incorrect');
+    }
+
+    // Generate and return JWT token
+    const token = generateToken(user._id);
+    res.json({ token, user });
+
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).send('Server error');
   }
 };
 

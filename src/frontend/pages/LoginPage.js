@@ -31,17 +31,19 @@ const LoginPage = () => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', { email, password });
-      const { token, user } = response.data; // Destructure token and user from the response
-      setAuthData({ token, user }); // Store both token and user in authData
+      const response = await axios.post('https://taskwhiz.netlify.app/api/auth/login', {
+        email: email, // Ensure `email` and `password` are defined and captured correctly
+        password: password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const { token, user } = response.data;
+      setAuthData({ token, user });
       navigate('/tasks');
     } catch (error) {
       console.error('Login error', error);
-      if (error.response && error.response.data) {
-        setErrors({ server: error.response.data.message });
-      } else {
-        setErrors({ server: 'An unexpected error occurred. Please try again later.' });
-      }
     }
   };
 
@@ -50,11 +52,11 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <form onSubmit={handleSubmit} className="login-form">
-            <h2>Login</h2>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="row justify-content-center w-100">
+        <div className="col-md-6 col-lg-4">
+          <form onSubmit={handleSubmit} className="login-form p-4 border rounded shadow">
+            <h2 className="text-center">Login</h2>
             <div className="form-group">
               <label>Email</label>
               <input
@@ -62,30 +64,38 @@ const LoginPage = () => {
                 className="form-control"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              {errors.email && <span className="error">{errors.email}</span>}
+              {errors.email && <span className="error text-danger">{errors.email}</span>}
             </div>
             <div className="form-group">
               <label>Password</label>
-              <div className="input-group"> {/* Use input-group */}
+              <div className="input-group">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   className="form-control"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
-                <div className="input-group-append ml-3"> {/* Add input-group-append */}
+                <div className="input-group-append ps-2">
                   <button type="button" className="btn btn-secondary" onClick={toggleShowPassword}>
                     {showPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
               </div>
-              {errors.password && <span className="error">{errors.password}</span>}
+              {errors.password && <span className="error text-danger">{errors.password}</span>}
             </div>
-            <button type="submit" className="btn btn-primary mt-3">Login</button>
-            {errors.server && <span className="error">{errors.server}</span>}
-            <p className="mt-3">
-              Don't have an account? <Link to="/signup">Register here</Link>.
+            <button type="submit" className="btn btn-primary btn-block mt-3">Login</button>
+            {errors.server && <span className="error text-danger">{errors.server}</span>}
+            <p className="mt-3 text-center">
+              Don't have an account? {' '}
+            <span
+              onClick={() => navigate('/signup')}
+              style={{ color: 'blue', cursor: 'pointer' }}
+            >
+              Signup
+            </span>
             </p>
           </form>
         </div>

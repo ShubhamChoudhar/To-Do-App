@@ -7,8 +7,6 @@ const TaskForm = ({ addTask }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title && description) {
-      console.log("Title",title);
-      console.log("Description", description);
       addTask({ title, description });
       setTitle('');
       setDescription('');

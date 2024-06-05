@@ -1,4 +1,3 @@
-// backend/server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -10,7 +9,12 @@ const app = express();
 connectDB();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Ensure this line is present and before the routes
+
+app.post('/test', (req, res) => {
+    console.log(req.body);
+    res.send('Test route');
+  });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
