@@ -20,7 +20,7 @@ const TodoListPage = () => {
     const fetchTasks = async () => {
       try {
         if (authData && authData.token) {
-          const response = await axios.get('https://taskwhiz.netlify.app/api/tasks', {
+          const response = await axios.get('https://to-do-app-2933.onrender.com/api/tasks', {
             headers: { Authorization: `Bearer ${authData.token}` }
           });
           setTasks(response.data);
@@ -35,7 +35,7 @@ const TodoListPage = () => {
 
   const addTask = async (task) => {
     try {
-      const response = await axios.post('https://taskwhiz.netlify.app/api/tasks', task, {
+      const response = await axios.post('https://to-do-app-2933.onrender.com/api/tasks', task, {
         headers: { Authorization: `Bearer ${authData.token}` }
       });
       setTasks([...tasks, response.data]);
@@ -46,7 +46,7 @@ const TodoListPage = () => {
   
   const updateTask = async (id, updatedTask) => {
     try {
-      const response = await axios.put(`https://taskwhiz.netlify.app/api/tasks/${id}`, updatedTask, {
+      const response = await axios.put(`https://to-do-app-2933.onrender.com/api/tasks/${id}`, updatedTask, {
         headers: { Authorization: `Bearer ${authData.token}` }
       });
       setTasks(tasks.map(task => task._id === id ? response.data : task));
@@ -57,7 +57,7 @@ const TodoListPage = () => {
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`https://taskwhiz.netlify.app/api/tasks/${id}`, {
+      await axios.delete(`https://to-do-app-2933.onrender.com/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${authData.token}` }
       });
       setTasks(tasks.filter(task => task._id !== id));

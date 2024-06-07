@@ -31,7 +31,7 @@ const LoginPage = () => {
       return;
     }
     try {
-      const response = await axios.post('https://taskwhiz.netlify.app/api/auth/login', {
+      const response = await axios.post('https://to-do-app-2933.onrender.com/api/auth/login', {
         email: email, // Ensure `email` and `password` are defined and captured correctly
         password: password
       }, {

@@ -33,7 +33,7 @@ const SignUpPage = () => {
       return;
     }
     try {
-      await axios.post('https://taskwhiz.netlify.app/api/auth/register', { username, email, password });
+      await axios.post('https://to-do-app-2933.onrender.com/api/auth/register', { username, email, password });
       navigate('/login');
     } catch (error) {
       console.error('Registration error', error);
